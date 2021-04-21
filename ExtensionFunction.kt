@@ -151,22 +151,129 @@ object ExtensionFunction {
 
     //---------------------------------- Fragment -------------------------------------------------
 
-    fun Fragment?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let { activity.toast(text, duration) }
-    fun Fragment?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) = this?.let { activity.toast(textId, duration) }
-    fun SupportFragment?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let { activity.toast(text, duration) }
-    fun SupportFragment?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) = this?.let { activity.toast(textId, duration) }
+    fun Fragment?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) =
+        this?.let { activity.toast(text, duration) }
+
+    fun Fragment?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) =
+        this?.let { activity.toast(textId, duration) }
+
+    fun SupportFragment?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) =
+        this?.let { activity.toast(text, duration) }
+
+    fun SupportFragment?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) =
+        this?.let { activity.toast(textId, duration) }
+
     fun Fragment.browse(url: String, newTask: Boolean = false) = activity.browse(url, newTask)
     fun SupportFragment.browse(url: String, newTask: Boolean = false) = activity.browse(url, newTask)
     fun Fragment.share(text: String, subject: String = "") = activity.share(text, subject)
     fun SupportFragment.share(text: String, subject: String = "") = activity.share(text, subject)
     fun Fragment.email(email: String, subject: String = "", text: String = "") = activity.email(email, subject, text)
-    fun SupportFragment.email(email: String, subject: String = "", text: String = "") = activity.email(email, subject, text)
+    fun SupportFragment.email(email: String, subject: String = "", text: String = "") =
+        activity.email(email, subject, text)
+
     fun Fragment.makeCall(number: String) = activity.makeCall(number)
     fun SupportFragment.makeCall(number: String) = activity.makeCall(number)
     fun Fragment.sendSms(number: String, text: String = "") = activity.sendSms(number, text)
     fun SupportFragment.sendSms(number: String, text: String = "") = activity.sendSms(number, text)
     fun Fragment.hideSoftKeyboard() {
         activity?.hideSoftKeyboard()
+    }
+
+
+    //------------------------------- Activity ----------------------------------------------------
+    fun Activity.hideSoftKeyboard() {
+        if (currentFocus != null) {
+            val inputMethodManager = getSystemService(Context
+                .INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+        }
+    }
+
+
+    // ------------------------------ String -------------------------------------------------------
+    fun String.isPhone(): Boolean {
+        val p = "^1([34578])\\d{9}\$".toRegex()
+        return matches(p)
+    }
+    fun String.sha1() = encrypt(this, "SHA-1")
+    fun String.md5() = encrypt(this, "MD5")
+    fun String.toast(isShortToast: Boolean = true) = toast(this, isShortToast)
+    fun String.isPhone(): Boolean {
+        val p = "^1([34578])\\d{9}\$".toRegex()
+        return matches(p)
+    }
+    fun String.isNumeric(): Boolean {
+        val p = "^[0-9]+$".toRegex()
+        return matches(p)
+    }
+    fun String.equalsIgnoreCase(other: String) = this.toLowerCase().contentEquals(other.toLowerCase())
+    private fun encrypt(string: String?, type: String): String {
+        if (string.isNullOrEmpty()) {
+            return ""
+        }
+        val md5: MessageDigest
+        return try {
+            md5 = MessageDigest.getInstance(type)
+            val bytes = md5.digest(string!!.toByteArray())
+            bytes2Hex(bytes)
+        } catch (e: NoSuchAlgorithmException) {
+            ""
+        }
+    }
+    fun Char.decimalValue(): Int {
+        if (!isDigit())
+            throw IllegalArgumentException("Out of range")
+        return this.toInt() - '0'.toInt()
+    }
+    inline fun SpannableStringBuilder.withSpan(vararg spans: Any, action: SpannableStringBuilder.() -> Unit):
+            SpannableStringBuilder {
+        val from = length
+        action()
+
+        for (span in spans) {
+            setSpan(span, from, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        return this
+    }
+    fun Int.twoDigitTime() = if (this < 10) "0" + toString() else toString()
+    fun String.dateInFormat(format: String): Date? {
+        val dateFormat = SimpleDateFormat(format, Locale.getDefault())
+        var parsedDate: Date? = null
+        try {
+            parsedDate = dateFormat.parse(this)
+        } catch (ignored: ParseException) {
+            ignored.printStackTrace()
+        }
+        return parsedDate
+    }
+    fun getClickableSpan(color: Int, action: (view: View) -> Unit): ClickableSpan {
+        return object : ClickableSpan() {
+            override fun onClick(view: View) {
+                action(view)
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.color = color
+            }
+        }
+    }
+
+    
+    fun ImageView.loadFromUrl(imageUrl: String) {
+        Glide.with(this).load(imageUrl).into(this)
+    }
+    fun MenuItem.loadIconFromUrl(context: Context, imageUrl: String) {
+        Glide.with(context).asBitmap()
+            .load(imageUrl)
+            .into(object : SimpleTarget<Bitmap>(100, 100) {
+                override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
+                    val circularIcon = RoundedBitmapDrawableFactory.create(context.resources, resource)
+                    circularIcon.isCircular = true
+                    icon = circularIcon
+                }
+            })
     }
 
 }    
