@@ -183,8 +183,10 @@ object ExtensionFunction {
     //------------------------------- Activity ----------------------------------------------------
     fun Activity.hideSoftKeyboard() {
         if (currentFocus != null) {
-            val inputMethodManager = getSystemService(Context
-                .INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager = getSystemService(
+                Context
+                    .INPUT_METHOD_SERVICE
+            ) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
     }
@@ -195,6 +197,7 @@ object ExtensionFunction {
         val p = "^1([34578])\\d{9}\$".toRegex()
         return matches(p)
     }
+
     fun String.sha1() = encrypt(this, "SHA-1")
     fun String.md5() = encrypt(this, "MD5")
     fun String.toast(isShortToast: Boolean = true) = toast(this, isShortToast)
@@ -202,10 +205,12 @@ object ExtensionFunction {
         val p = "^1([34578])\\d{9}\$".toRegex()
         return matches(p)
     }
+
     fun String.isNumeric(): Boolean {
         val p = "^[0-9]+$".toRegex()
         return matches(p)
     }
+
     fun String.equalsIgnoreCase(other: String) = this.toLowerCase().contentEquals(other.toLowerCase())
     private fun encrypt(string: String?, type: String): String {
         if (string.isNullOrEmpty()) {
@@ -220,11 +225,13 @@ object ExtensionFunction {
             ""
         }
     }
+
     fun Char.decimalValue(): Int {
         if (!isDigit())
             throw IllegalArgumentException("Out of range")
         return this.toInt() - '0'.toInt()
     }
+
     inline fun SpannableStringBuilder.withSpan(vararg spans: Any, action: SpannableStringBuilder.() -> Unit):
             SpannableStringBuilder {
         val from = length
@@ -236,6 +243,7 @@ object ExtensionFunction {
 
         return this
     }
+
     fun Int.twoDigitTime() = if (this < 10) "0" + toString() else toString()
     fun String.dateInFormat(format: String): Date? {
         val dateFormat = SimpleDateFormat(format, Locale.getDefault())
@@ -247,6 +255,7 @@ object ExtensionFunction {
         }
         return parsedDate
     }
+
     fun getClickableSpan(color: Int, action: (view: View) -> Unit): ClickableSpan {
         return object : ClickableSpan() {
             override fun onClick(view: View) {
@@ -260,10 +269,32 @@ object ExtensionFunction {
         }
     }
 
-    
+    //------------------------------------- Image Related --------------------------------------
+    fun Bitmap.toBase64(): String {
+        var result = ""
+        val baos = ByteArrayOutputStream()
+        try {
+            compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            baos.flush()
+            baos.close()
+            val bitmapBytes = baos.toByteArray()
+            result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            try {
+                baos.flush()
+                baos.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        return result
+    }
     fun ImageView.loadFromUrl(imageUrl: String) {
         Glide.with(this).load(imageUrl).into(this)
     }
+
     fun MenuItem.loadIconFromUrl(context: Context, imageUrl: String) {
         Glide.with(context).asBitmap()
             .load(imageUrl)
@@ -275,5 +306,20 @@ object ExtensionFunction {
                 }
             })
     }
+
+    // ------------------------------------  OS --------------------------------------------
+
+    inline fun aboveApi(api: Int, included: Boolean = false, block: () -> Unit) {
+        if (Build.VERSION.SDK_INT > if (included) api - 1 else api) {
+            block()
+        }
+    }
+
+    inline fun belowApi(api: Int, included: Boolean = false, block: () -> Unit) {
+        if (Build.VERSION.SDK_INT < if (included) api + 1 else api) {
+            block()
+        }
+    }
+
 
 }    
