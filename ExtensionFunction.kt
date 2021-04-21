@@ -47,7 +47,7 @@ object ExtensionFunction {
 
     fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG) = snack(message, length) {}
 
-    
+
     /**
      * Extension method to provide simpler access to {@link View#getResources()#getString(int)}.
      */
@@ -67,4 +67,78 @@ object ExtensionFunction {
         }
         return false
     }
+
+
+
+
+    // ----------------------------------Context ---------------------------------------------------
+
+    fun Context.getColorCompat(color: Int) = ContextCompat.getColor(this, color)
+    fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) = this?.let { Toast.makeText(it, text, duration).show() }
+    fun Context?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) = this?.let { Toast.makeText(it, textId, duration).show() }
+    fun Context.getInteger(@IntegerRes id: Int) = resources.getInteger(id)
+    fun Context.getBoolean(@BoolRes id: Int) = resources.getBoolean(id)
+    fun Context.getColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+    fun Context.getDrawable(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
+
+    fun Context.browse(url: String, newTask: Boolean = false): Boolean {
+        try {
+            val intent = intent(ACTION_VIEW) {
+                data = Uri.parse(url)
+                if (newTask) addFlags(FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(intent)
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
+    fun Context.share(text: String, subject: String = ""): Boolean {
+        val intent = Intent()
+        intent.type = "text/plain"
+        intent.putExtra(EXTRA_SUBJECT, subject)
+        intent.putExtra(EXTRA_TEXT, text)
+        try {
+            startActivity(createChooser(intent, null))
+            return true
+        } catch (e: ActivityNotFoundException) {
+            return false
+        }
+    }
+    fun Context.email(email: String, subject: String = "", text: String = ""): Boolean {
+        val intent = intent(ACTION_SENDTO) {
+            data = Uri.parse("mailto:")
+            putExtra(EXTRA_EMAIL, arrayOf(email))
+            if (subject.isNotBlank()) putExtra(EXTRA_SUBJECT, subject)
+            if (text.isNotBlank()) putExtra(EXTRA_TEXT, text)
+        }
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+            return true
+        }
+        return false
+    }
+    fun Context.makeCall(number: String): Boolean {
+        try {
+            val intent = Intent(ACTION_CALL, Uri.parse("tel:$number"))
+            startActivity(intent)
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
+    fun Context.sendSms(number: String, text: String = ""): Boolean {
+        try {
+            val intent = intent(ACTION_VIEW, Uri.parse("sms:$number")) {
+                putExtra("sms_body", text)
+            }
+            startActivity(intent)
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
+    fun Context.rate(): Boolean = browse("market://details?id=$packageName") or browse("http://play.google.com/store/apps/details?id=$packageName")
+
 }    
