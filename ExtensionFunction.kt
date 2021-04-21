@@ -25,6 +25,29 @@ object ExtensionFunction {
         return this
     }
 
+    fun View.toggleVisibility() : View {
+        if (visibility == View.VISIBLE) {
+            visibility = View.INVISIBLE
+        } else {
+            visibility = View.INVISIBLE
+        }
+        return this
+    }
+
+    /**
+     * Extension method to get a view as bitmap.
+     */
+    fun View.getBitmap(): Bitmap {
+        val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bmp)
+        draw(canvas)
+        canvas.save()
+        return bmp
+    }
+
+    fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG) = snack(message, length) {}
+
+    
     /**
      * Extension method to provide simpler access to {@link View#getResources()#getString(int)}.
      */
