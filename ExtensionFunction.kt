@@ -1,3 +1,42 @@
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.content.Intent.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.net.Uri
+import android.os.Build
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
+import android.transition.Transition
+import android.util.Base64.DEFAULT
+import android.util.Base64.encodeToString
+import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.annotation.*
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.google.android.material.snackbar.Snackbar
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+
 object ExtensionFunction {
 
     fun View.show(): View {
