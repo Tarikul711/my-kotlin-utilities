@@ -1,5 +1,8 @@
-package com.example.helloworld.utils
+package com.islam.androidtestingapp.utils
 
+/**
+ *Created by tarikul on 6/7/21
+ */
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
@@ -17,7 +20,7 @@ import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.UnknownHostException
 import java.nio.channels.IllegalBlockingModeException
-import java.util.concurrent.CancellationException
+
 
 class ConnectivityAndInternetAccess(val host: String) {
 
@@ -42,7 +45,7 @@ class ConnectivityAndInternetAccess(val host: String) {
         private fun getActiveNetworkInfo(context: Context): NetworkInfo? {
             var networkInfo: NetworkInfo? = null
             val cm = context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (cm != null) {
                 networkInfo = cm.activeNetworkInfo
             }
@@ -58,7 +61,7 @@ class ConnectivityAndInternetAccess(val host: String) {
         private fun getActiveNetwork(context: Context): Network? {
             var networkInfo: Network? = null
             val cm = context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (cm != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     networkInfo = cm.activeNetwork
@@ -78,7 +81,7 @@ class ConnectivityAndInternetAccess(val host: String) {
         private fun getActiveNetworkInfo(context: Context, network: Network?): NetworkInfo? {
             var networkInfo: NetworkInfo? = null
             val cm = context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (cm != null && network != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     networkInfo = cm.getNetworkInfo(network)
@@ -96,7 +99,7 @@ class ConnectivityAndInternetAccess(val host: String) {
          */
         private fun getAllNetworkInfo(context: Context?): Array<NetworkInfo?> {
             val cm = context
-                    ?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                ?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             var nwInfo = arrayOfNulls<NetworkInfo>(0)
             if (cm != null) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -129,11 +132,11 @@ class ConnectivityAndInternetAccess(val host: String) {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
-                if (!networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) {
+                if (!networkCapabilities!!.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) {
                     isNetworkFacilitatingFastNetworkSwitching = true
                 }
             } else {
-                Log.e("UnusableMethod", null)
+                Log.e("UnusableMethod", null.toString())
             }
             return isNetworkFacilitatingFastNetworkSwitching
         }
@@ -149,11 +152,11 @@ class ConnectivityAndInternetAccess(val host: String) {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
-                if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) {
+                if (networkCapabilities!!.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) {
                     isNetworkUsableByApps = true
                 }
             } else {
-                Log.e("UnusableMethod", null)
+                Log.e("UnusableMethod", null.toString())
             }
             return isNetworkUsableByApps
         }
@@ -163,11 +166,11 @@ class ConnectivityAndInternetAccess(val host: String) {
             val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
-                if (!networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) {
+                if (!networkCapabilities!!.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) {
                     isNetworkSuspended = true
                 }
             } else {
-                Log.e("UnusableMethod", null)
+                Log.e("UnusableMethod", null.toString())
             }
             return isNetworkSuspended
         }
@@ -185,19 +188,19 @@ class ConnectivityAndInternetAccess(val host: String) {
                 val network = getActiveNetwork(context)
                 if (network != null) {
                     val networkCapabilities = connectivityManager
-                            .getNetworkCapabilities(network)
+                        .getNetworkCapabilities(network)
                     if (networkCapabilities != null) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             if (network != null) {
                                 if (networkCapabilities != null) {
                                     if (networkCapabilities.hasCapability(
-                                                    NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
-                                            && networkCapabilities.hasCapability(
-                                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
-                                            && networkCapabilities.hasCapability(
-                                                    NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED) /*API >= 28*/
-                                            && networkCapabilities.hasCapability(
-                                                    NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
+                                            NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
+                                        && networkCapabilities.hasCapability(
+                                            NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
+                                        && networkCapabilities.hasCapability(
+                                            NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED) /*API >= 28*/
+                                        && networkCapabilities.hasCapability(
+                                            NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
                                         isConnected = true
                                     }
                                 }
@@ -207,14 +210,14 @@ class ConnectivityAndInternetAccess(val host: String) {
                                 if (networkCapabilities != null) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                         if (networkCapabilities.hasCapability(
-                                                        NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
-                                                && networkCapabilities.hasCapability(
-                                                        NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
+                                                NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
+                                            && networkCapabilities.hasCapability(
+                                                NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
                                             isConnected = true
                                         }
                                     } else {
                                         if (networkCapabilities.hasCapability(
-                                                        NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
+                                                NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
                                             isConnected = true
                                         }
                                     }
@@ -222,10 +225,10 @@ class ConnectivityAndInternetAccess(val host: String) {
                             }
                         }
                     } else {
-                        Log.e("NullNetworkCapabilities", null)
+                        Log.e("NullNetworkCapabilities", null.toString())
                     }
                 } else {
-                    Log.e("NullNetwork", null)
+                    Log.e("NullNetwork", null.toString())
                 }
             } else {
                 val info = getActiveNetworkInfo(context)
@@ -250,18 +253,18 @@ class ConnectivityAndInternetAccess(val host: String) {
             val connectivityManager = getConnectivityManager(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val networkCapabilities = connectivityManager
-                        .getNetworkCapabilities(network)
+                    .getNetworkCapabilities(network)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     if (network != null) {
                         if (networkCapabilities != null) {
                             if (networkCapabilities
-                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
-                                    && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
-                                    && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED) /*API >= 28*/
-                                    && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
+                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
+                                && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
+                                && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED) /*API >= 28*/
+                                && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
                                 isConnected = true
                             }
                         }
@@ -269,14 +272,14 @@ class ConnectivityAndInternetAccess(val host: String) {
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (networkCapabilities
-                                        ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true /*API >= 21*/
-                                && networkCapabilities.hasCapability(
-                                        NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
+                                ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true /*API >= 21*/
+                            && networkCapabilities.hasCapability(
+                                NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
                             isConnected = true
                         }
                     } else {
                         if (networkCapabilities
-                                        ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true /*API >= 21*/) {
+                                ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true /*API >= 21*/) {
                             isConnected = true
                         }
                     }
@@ -307,42 +310,42 @@ class ConnectivityAndInternetAccess(val host: String) {
                 for (network in networks) {
                     if (network != null) {
                         val networkCapabilities = connectivityManager
-                                .getNetworkCapabilities(network)
+                            .getNetworkCapabilities(network)
                         if (networkCapabilities != null) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                                 if ((networkCapabilities
-                                                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
-                                                && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_VALIDATED) /* API >= 23*/
-                                                && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /* API >= 28*/
-                                        && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /* API >= 28*/ {
+                                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
+                                            && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_VALIDATED) /* API >= 23*/
+                                            && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /* API >= 28*/
+                                    && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /* API >= 28*/ {
                                     isConnected = true
                                     break
                                 }
                             } else {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                     if (networkCapabilities
-                                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
-                                            && networkCapabilities.hasCapability(
-                                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
+                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
+                                        && networkCapabilities.hasCapability(
+                                            NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
                                         isConnected = true
                                         break
                                     }
                                 } else {
                                     if (networkCapabilities
-                                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
+                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
                                         isConnected = true
                                         break
                                     }
                                 }
                             }
                         } else {
-                            Log.e("NullNetworkCapabilities", null)
+                            Log.e("NullNetworkCapabilities", null.toString())
                         }
                     } else {
-                        Log.e("NullNetwork", null)
+                        Log.e("NullNetwork", null.toString())
                     }
                 }
             } else {
@@ -376,22 +379,22 @@ class ConnectivityAndInternetAccess(val host: String) {
                 for (network in networks) {
                     if (network != null) {
                         val networkCapabilities = connectivityManager
-                                .getNetworkCapabilities(network)
+                            .getNetworkCapabilities(network)
                         if (networkCapabilities != null) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                                 if (network != null) {
                                     if (networkCapabilities != null) {
                                         if ((networkCapabilities.hasCapability(
-                                                        NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
-                                                        && networkCapabilities
-                                                        .hasCapability(
-                                                                NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API>=23*/
-                                                        && networkCapabilities.hasCapability(
-                                                        NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API>=28*/
-                                                && networkCapabilities.hasCapability(
-                                                        NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API>=28*/ {
+                                                NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
+                                                    && networkCapabilities
+                                                .hasCapability(
+                                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API>=23*/
+                                                    && networkCapabilities.hasCapability(
+                                                NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API>=28*/
+                                            && networkCapabilities.hasCapability(
+                                                NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API>=28*/ {
                                             if (networkCapabilities.hasTransport(
-                                                            NetworkCapabilities.TRANSPORT_WIFI)) {
+                                                    NetworkCapabilities.TRANSPORT_WIFI)) {
                                                 isConnectedWifi = true
                                                 break
                                             }
@@ -403,20 +406,20 @@ class ConnectivityAndInternetAccess(val host: String) {
                                     if (networkCapabilities != null) {
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                             if (networkCapabilities.hasCapability(
-                                                            NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
-                                                    && networkCapabilities.hasCapability(
-                                                            NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
+                                                    NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
+                                                && networkCapabilities.hasCapability(
+                                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
                                                 if (networkCapabilities.hasTransport(
-                                                                NetworkCapabilities.TRANSPORT_WIFI)) {
+                                                        NetworkCapabilities.TRANSPORT_WIFI)) {
                                                     isConnectedWifi = true
                                                     break
                                                 }
                                             }
                                         } else {
                                             if (networkCapabilities.hasCapability(
-                                                            NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
+                                                    NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
                                                 if (networkCapabilities.hasTransport(
-                                                                NetworkCapabilities.TRANSPORT_WIFI)) {
+                                                        NetworkCapabilities.TRANSPORT_WIFI)) {
                                                     isConnectedWifi = true
                                                     break
                                                 }
@@ -426,10 +429,10 @@ class ConnectivityAndInternetAccess(val host: String) {
                                 }
                             }
                         } else {
-                            Log.e("NullNetworkCapabilities", null)
+                            Log.e("NullNetworkCapabilities", null.toString())
                         }
                     } else {
-                        Log.e("NullNetwork", null)
+                        Log.e("NullNetwork", null.toString())
                     }
                 }
             } else {
@@ -462,20 +465,20 @@ class ConnectivityAndInternetAccess(val host: String) {
             val connectivityManager = getConnectivityManager(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val networkCapabilities = connectivityManager
-                        .getNetworkCapabilities(network)
+                    .getNetworkCapabilities(network)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     if (network != null) {
                         if (networkCapabilities != null) {
                             if ((networkCapabilities
-                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
-                                            && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API>=23*/
-                                            && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API>=28*/
-                                    && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API>=28*/ {
+                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
+                                        && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API>=23*/
+                                        && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API>=28*/
+                                && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API>=28*/ {
                                 if (networkCapabilities
-                                                .hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                                        .hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                                     isConnectedWifi = true
                                 }
                             }
@@ -486,19 +489,19 @@ class ConnectivityAndInternetAccess(val host: String) {
                         if (networkCapabilities != null) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (networkCapabilities
-                                                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
-                                        && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
+                                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
+                                    && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
                                     if (networkCapabilities
-                                                    .hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                                            .hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                                         isConnectedWifi = true
                                     }
                                 }
                             } else {
                                 if (networkCapabilities
-                                                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
+                                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
                                     if (networkCapabilities
-                                                    .hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                                            .hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                                         isConnectedWifi = true
                                     }
                                 }
@@ -508,7 +511,7 @@ class ConnectivityAndInternetAccess(val host: String) {
                 }
             } else {
                 val info = getActiveNetworkInfo(context,
-                        network)
+                    network)
                 /*
 			    Works on emulator and devices. Note the use of @link{NetworkInfo
 			    .isAvailable} - without this, @link{NetworkInfo.isConnected} can return
@@ -548,7 +551,7 @@ class ConnectivityAndInternetAccess(val host: String) {
          */
         fun isConnectedMobileTelephonyManager(context: Context): Boolean {
             val tm = context
-                    .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             var state = 0
             if (tm != null) {
                 state = tm.dataState
@@ -568,20 +571,20 @@ class ConnectivityAndInternetAccess(val host: String) {
             val connectivityManager = getConnectivityManager(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val networkCapabilities = connectivityManager
-                        .getNetworkCapabilities(network)
+                    .getNetworkCapabilities(network)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     if (network != null) {
                         if (networkCapabilities != null) {
                             if ((networkCapabilities
-                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
-                                            && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API>=23*/
-                                            && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API>=28*/
-                                    && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API>=28*/ {
+                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
+                                        && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API>=23*/
+                                        && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API>=28*/
+                                && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API>=28*/ {
                                 if (networkCapabilities
-                                                .hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                                        .hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                                     isConnectedMobile = true
                                 }
                             }
@@ -592,19 +595,19 @@ class ConnectivityAndInternetAccess(val host: String) {
                         if (networkCapabilities != null) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (networkCapabilities
-                                                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
-                                        && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
+                                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
+                                    && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
                                     if (networkCapabilities
-                                                    .hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                                            .hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                                         isConnectedMobile = true
                                     }
                                 }
                             } else {
                                 if (networkCapabilities
-                                                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
+                                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
                                     if (networkCapabilities
-                                                    .hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                                            .hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                                         isConnectedMobile = true
                                     }
                                 }
@@ -614,7 +617,7 @@ class ConnectivityAndInternetAccess(val host: String) {
                 }
             } else {
                 val info = getActiveNetworkInfo(context,
-                        network)
+                    network)
                 /*
 			    Works on emulator and devices. Note the use of @link{NetworkInfo
 			    .isAvailable} - without this, @link{NetworkInfo.isConnected} can return
@@ -638,20 +641,20 @@ class ConnectivityAndInternetAccess(val host: String) {
                 val networks = connectivityManager.allNetworks
                 for (network in networks) {
                     val networkCapabilities = connectivityManager
-                            .getNetworkCapabilities(network)
+                        .getNetworkCapabilities(network)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         if (network != null) {
                             if (networkCapabilities != null) {
                                 if ((networkCapabilities
-                                                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
-                                                && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
-                                                && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API >= 28*/
-                                        && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
+                                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
+                                            && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
+                                            && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API >= 28*/
+                                    && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
                                     if (networkCapabilities.hasTransport(
-                                                    NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                                            NetworkCapabilities.TRANSPORT_CELLULAR)) {
                                         isConnectedWifi = true
                                         break
                                     }
@@ -663,20 +666,20 @@ class ConnectivityAndInternetAccess(val host: String) {
                             if (networkCapabilities != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                     if (networkCapabilities
-                                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
-                                            && networkCapabilities.hasCapability(
-                                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
+                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
+                                        && networkCapabilities.hasCapability(
+                                            NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
                                         if (networkCapabilities.hasTransport(
-                                                        NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                                                NetworkCapabilities.TRANSPORT_CELLULAR)) {
                                             isConnectedWifi = true
                                             break
                                         }
                                     }
                                 } else {
                                     if (networkCapabilities
-                                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
+                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
                                         if (networkCapabilities.hasTransport(
-                                                        NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                                                NetworkCapabilities.TRANSPORT_CELLULAR)) {
                                             isConnectedWifi = true
                                             break
                                         }
@@ -717,20 +720,20 @@ class ConnectivityAndInternetAccess(val host: String) {
                 val networks = connectivityManager.allNetworks
                 for (network in networks) {
                     val networkCapabilities = connectivityManager
-                            .getNetworkCapabilities(network)
+                        .getNetworkCapabilities(network)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         if (network != null) {
                             if (networkCapabilities != null) {
                                 if ((networkCapabilities
-                                                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
-                                                && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
-                                                && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API >= 28*/
-                                        && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
+                                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
+                                            && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
+                                            && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API >= 28*/
+                                    && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
                                     if (networkCapabilities.hasTransport(
-                                                    NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                                            NetworkCapabilities.TRANSPORT_ETHERNET)) {
                                         isConnectedEthernet = true
                                         break
                                     }
@@ -742,20 +745,20 @@ class ConnectivityAndInternetAccess(val host: String) {
                             if (networkCapabilities != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                     if (networkCapabilities
-                                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
-                                            && networkCapabilities.hasCapability(
-                                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
+                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
+                                        && networkCapabilities.hasCapability(
+                                            NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
                                         if (networkCapabilities.hasTransport(
-                                                        NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                                                NetworkCapabilities.TRANSPORT_ETHERNET)) {
                                             isConnectedEthernet = true
                                             break
                                         }
                                     }
                                 } else {
                                     if (networkCapabilities
-                                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
+                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
                                         if (networkCapabilities.hasTransport(
-                                                        NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                                                NetworkCapabilities.TRANSPORT_ETHERNET)) {
                                             isConnectedEthernet = true
                                             break
                                         }
@@ -795,20 +798,20 @@ class ConnectivityAndInternetAccess(val host: String) {
             val connectivityManager = getConnectivityManager(context)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val networkCapabilities = connectivityManager
-                        .getNetworkCapabilities(network)
+                    .getNetworkCapabilities(network)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     if (network != null) {
                         if (networkCapabilities != null) {
                             if ((networkCapabilities
-                                            .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
-                                            && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
-                                            && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API >= 28*/
-                                    && networkCapabilities.hasCapability(
-                                            NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
+                                    .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /* API >= 21*/
+                                        && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/
+                                        && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)) /*API >= 28*/
+                                && networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) /*API >= 28*/ {
                                 if (networkCapabilities
-                                                .hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                                        .hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
                                     isConnectedEthernet = true
                                 }
                             }
@@ -819,19 +822,19 @@ class ConnectivityAndInternetAccess(val host: String) {
                         if (networkCapabilities != null) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (networkCapabilities
-                                                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
-                                        && networkCapabilities.hasCapability(
-                                                NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
+                                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/
+                                    && networkCapabilities.hasCapability(
+                                        NetworkCapabilities.NET_CAPABILITY_VALIDATED) /*API >= 23*/) {
                                     if (networkCapabilities
-                                                    .hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                                            .hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
                                         isConnectedEthernet = true
                                     }
                                 }
                             } else {
                                 if (networkCapabilities
-                                                .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
+                                        .hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) /*API >= 21*/) {
                                     if (networkCapabilities
-                                                    .hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                                            .hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
                                         isConnectedEthernet = true
                                     }
                                 }
@@ -841,7 +844,7 @@ class ConnectivityAndInternetAccess(val host: String) {
                 }
             } else {
                 val info = getActiveNetworkInfo(context,
-                        network)
+                    network)
                 /*
 			    Works on emulator and devices. Note the use of @link{NetworkInfo
 			    .isAvailable} - without this, @link{NetworkInfo.isConnected} can return
@@ -876,14 +879,14 @@ class ConnectivityAndInternetAccess(val host: String) {
                 for (network in allNetworks) {
                     if (network != null && isConnected(context, network)) {
                         val networkCapabilities = connectivityManager
-                                .getNetworkCapabilities(network)
+                            .getNetworkCapabilities(network)
                         if (networkCapabilities != null) {
                             val linkDownstreamBandwidthKbps = networkCapabilities
-                                    .linkDownstreamBandwidthKbps
+                                .linkDownstreamBandwidthKbps
                             val linkUpstreamBandwidthKbps = networkCapabilities
-                                    .linkUpstreamBandwidthKbps
+                                .linkUpstreamBandwidthKbps
                             if (linkDownstreamBandwidthKbps >= minimumSpeedForFastConnection
-                                    && linkUpstreamBandwidthKbps >= minimumSpeedForFastConnection) {
+                                && linkUpstreamBandwidthKbps >= minimumSpeedForFastConnection) {
                                 isConnectedFast = true
                                 break
                             }
@@ -912,14 +915,14 @@ class ConnectivityAndInternetAccess(val host: String) {
                 val connectivityManager = getConnectivityManager(context)
                 if (network != null && isConnected(context, network)) {
                     val networkCapabilities = connectivityManager
-                            .getNetworkCapabilities(network)
+                        .getNetworkCapabilities(network)
                     if (networkCapabilities != null) {
                         val linkDownstreamBandwidthKbps = networkCapabilities
-                                .linkDownstreamBandwidthKbps
+                            .linkDownstreamBandwidthKbps
                         val linkUpstreamBandwidthKbps = networkCapabilities
-                                .linkUpstreamBandwidthKbps
+                            .linkUpstreamBandwidthKbps
                         if (linkDownstreamBandwidthKbps >= minimumSpeedForFastConnection
-                                && linkUpstreamBandwidthKbps >= minimumSpeedForFastConnection) {
+                            && linkUpstreamBandwidthKbps >= minimumSpeedForFastConnection) {
                             isConnectedFast = true
                         }
                     }
@@ -937,10 +940,10 @@ class ConnectivityAndInternetAccess(val host: String) {
         fun isAirplaneModeOn(context: Context): Boolean {
             val isAirplaneModeOn: Boolean = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 Settings.System.getInt(context.contentResolver,
-                        Settings.System.AIRPLANE_MODE_ON, 0) != 0
+                    Settings.System.AIRPLANE_MODE_ON, 0) != 0
             } else {
                 Settings.Global.getInt(context.contentResolver,
-                        Settings.Global.AIRPLANE_MODE_ON, 0) != 0
+                    Settings.Global.AIRPLANE_MODE_ON, 0) != 0
             }
             return isAirplaneModeOn
         }
@@ -954,7 +957,7 @@ class ConnectivityAndInternetAccess(val host: String) {
         fun isConnectionFast(type: Int, subType: Int): Boolean {
             val connectedFast: Boolean
             connectedFast = if (type == ConnectivityManager.TYPE_WIFI
-                    || type == ConnectivityManager.TYPE_ETHERNET) {
+                || type == ConnectivityManager.TYPE_ETHERNET) {
                 true
             } else if (type == ConnectivityManager.TYPE_MOBILE) {
                 when (subType) {
