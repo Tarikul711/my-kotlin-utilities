@@ -279,4 +279,38 @@ object ExtensionFunction {
         smoothScroller.targetPosition = position
         layoutManager?.startSmoothScroll(smoothScroller)
     }
+    
+    
+    
+    fun View.errorScreen(message: String, parent: View) {
+        if (message.contentEquals(Constants.NO_INTERNET_CONNECTION)) {
+            layoutNoInternet.multipleViewShowHideOperation(
+                parent,
+                layoutProgressBar
+            )
+        } else {
+            layoutDataIsNotAvailable.showHideForDataIsNotAvailable(
+                parent,
+                layoutProgressBar,
+                layoutNoInternet
+            )
+        }
+    }
+
+    fun View.loadingScreen(parent: View) {
+        multipleViewShowHideOperation(
+            parent,
+            layoutNoInternet
+        )
+    }
+
+    fun View.dataNotAvailable(parent: View) {
+        showHideForDataIsNotAvailable(parent, layoutProgressBar, layoutNoInternet)
+    }
+
 }    
+
+
+
+
+
